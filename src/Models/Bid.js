@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 
-const bid = new mongoose.Schema({
+const bidController = new mongoose.Schema({
     bidId: {
         type: String,
         required: true
@@ -22,4 +22,4 @@ const bid = new mongoose.Schema({
         required: true
     }
 })
-module.exports = mongoose.model("bid", bid);
+module.exports = mongoose.model("bid", bidController);

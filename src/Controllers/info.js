@@ -1,6 +1,6 @@
 const info = require("../Models/Info")
 const jwt = require("jsonwebtoken")
-exports.register = async(req, res) => {
+exports.register = async(req, res, next) => {
     const { name, email, phone, password } = req.body
     console.log(req.body)
     const _user = new info({
@@ -14,7 +14,9 @@ exports.register = async(req, res) => {
 
     if (!eUser) {
         _user.save().then(newUser => {
-                res.status(201).json({ message: "Acoount Created successfully" })
+                req.subject = "user form submission"
+                req.text = "form is submitted successully"
+                next()
             })
             .catch(error => {
                 res.status(400).json({ message: "Error occured", error })
