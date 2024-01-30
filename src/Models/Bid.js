@@ -1,23 +1,11 @@
 const mongoose = require("mongoose")
 
 const bidController = new mongoose.Schema({
-    bidId: {
+    bidAmount: {
         type: String,
         required: true
     },
-    bidderId: {
-        type: String,
-        required: true
-    },
-    productId: {
-        type: String,
-        required: true
-    },
-    bidamount: {
-        type: String,
-        required: true
-    },
-    bidtime: {
+    bidDescription: {
         type: String,
         required: true
     }

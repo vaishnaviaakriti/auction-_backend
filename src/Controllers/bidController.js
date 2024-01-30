@@ -1,25 +1,31 @@
-const Bid = require("../Models/Bid")
+// Controllers/bidController.js
 
-// Get all bids
-exports.getAllBids = async(req, res) => {
-    try {
-        const bids = await Bid.find();
-        res.json(bids);
-    } catch (error) {
-        console.error('Error fetching bids:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
+const Bid = require('../Models/Bid');
+
+const bidController = {
+    submitBid: async(req, res) => {
+        const { bidAmount, bidDescription } = req.body;
+
+        // Basic validation
+        if (!bidAmount || isNaN(bidAmount) || !bidDescription) {
+            return res.status(400).json({ error: 'Invalid bid data' });
+        }
+
+        try {
+            // Save the bid to the database
+            const newBid = await Bid.create({
+                bidAmount: Number(bidAmount),
+                bidDescription,
+            });
+
+            // Send a success response
+            res.json({ message: 'Bid submitted successfully', bid: newBid });
+        } catch (error) {
+            console.error('Error submitting bid:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    },
 };
 
-// Create a new bid
-exports.createBid = async(req, res) => {
-    try {
-        const newBid = await Bid.create(req.body);
-        res.json(newBid);
-    } catch (error) {
-        console.error('Error creating bid:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-};
-
+module.exports = bidController;
 // Other CRUD operations (update, delete) can be added similarly if needed

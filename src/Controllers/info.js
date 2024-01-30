@@ -13,8 +13,9 @@ exports.register = async(req, res, next) => {
     const eUser = await info.findOne({ email, })
 
     if (!eUser) {
-        _user.save().then(newUser => {
-                req.subject = "user form submission"
+        _user.save().then(newUser => {;
+                req.subject = "user form submission "
+
                 req.text = "form is submitted successully"
                 next()
             })
@@ -47,9 +48,19 @@ exports.login = async(req, res) => {
 
         }
     } else {
-        return res.status(404).json({ message: "email or pass incorrect" })
+        return res.status(404).json({ message: "email or pass incorrect"  })
 
 
 
+            
+    }
+}
+exports.updateUser = async(req, res) => {
+    try {
+        const newData = req.body;
+        const updateUser = await info.findByIdAndUpdate(req.id, newData)
+
+    } catch (e) {
+        return res.status(200).json({ info })
     }
 }

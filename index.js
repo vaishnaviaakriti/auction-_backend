@@ -1,15 +1,18 @@
 const express = require("express")
+
 const mongoose = require("mongoose")
 const info = require("./src/Models/Info")
 const { register, login } = require("./src/Controllers/info")
+const { updateUser } = require("./src/Controllers/info")
 const server = express()
 const cors = require("cors")
-const { addForm } = require("./src/Controllers/Form")
-const { validateForm, isValidated } = require("./src/Middlewares")
+const { addForm } = require("./src/Controllers/Form");
+const { validateForm, isValidated } = require("./src/Middlewares");
 const http = require("http")
     // const { Server } = require("socket.io ")
-const { Server } = require('socket.io')
-const { sendEmail } = require("./src/Helper/Email")
+const { Server } = require('socket.io');
+const { sendEmail } = require("./src/Helper/Email");
+const bidController = require('./src/Controllers/bidController');
 const app = http.createServer(server)
 const io = new Server(app)
 
@@ -24,7 +27,12 @@ server.get("/", (req, res) => {
 }), server.post("/register", register, sendEmail);
 server.post("/login", login);
 server.post("/addForm", validateForm, isValidated, addForm, sendEmail);
+server.post('/submitBid', bidController.submitBid);
 
+// server.put("/update-user", updateUser)
+// server.get("/get-product/:id", (req, res) => {
+//     res.send(req.params.id)
+// })
 
 // io.on("connection", socket => {
 //     console.log("new user connected")
