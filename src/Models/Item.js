@@ -9,7 +9,7 @@ const item = new mongoose.Schema({
         type: String,
         required: true
     },
-    title: {
+    category: {
         type: String,
         required: true
     },
@@ -22,11 +22,11 @@ const item = new mongoose.Schema({
         required: true
     },
     startdate: {
-        type: String,
+        type: Number,
         required: true
     },
     enddate: {
-        type: String,
+        type: Number,
         required: true
     },
     status: {

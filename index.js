@@ -13,6 +13,7 @@ const http = require("http")
 const { Server } = require('socket.io');
 const { sendEmail } = require("./src/Helper/Email");
 const bidController = require('./src/Controllers/bidController');
+const { additem, getItem } = require("./src/Controllers/Item")
 const app = http.createServer(server)
 const io = new Server(app)
 
@@ -29,10 +30,12 @@ server.post("/login", login);
 server.post("/addForm", validateForm, isValidated, addForm, sendEmail);
 server.post('/submitBid', bidController.submitBid);
 
-// server.put("/update-user", updateUser)
-// server.get("/get-product/:id", (req, res) => {
-//     res.send(req.params.id)
-// })
+server.post('/addItem', additem)
+server.get('/getItem', getItem)
+    // server.put("/update-user", updateUser)
+    // server.get("/get-product/:id", (req, res) => {
+    //     res.send(req.params.id)
+    // })
 
 // io.on("connection", socket => {
 //     console.log("new user connected")
@@ -70,7 +73,8 @@ io.on("connection", socket => {
 app.listen("3000", () => {
     console.log("Server started")
 });
-mongoose.connect("mongodb://localhost:27017")
+mongoose
+    .connect("mongodb://localhost:27017/test")
     .then(data => console.log("Database connected"))
     .catch(error => console.log(error))
 
