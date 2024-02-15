@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 
 const bidController = new mongoose.Schema({
     bidAmount: {
-        type: String,
+        type: Number,
         required: true
     },
     bidDescription: {
