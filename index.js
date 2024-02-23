@@ -29,7 +29,7 @@ server.get("/", (req, res) => {
 server.post("/login", login);
 server.post("/addForm", validateForm, isValidated, addForm, sendEmail);
 server.post('/submitBid', bidController.submitBid);
-
+server.get('/getHighestBid', bidController.getHighestBid);
 server.post('/addItem', additem)
 server.get('/getItem', getItem)
     // server.put("/update-user", updateUser)

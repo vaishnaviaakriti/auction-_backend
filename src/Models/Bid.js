@@ -8,6 +8,12 @@ const bidController = new mongoose.Schema({
     bidDescription: {
         type: String,
         required: true
-    }
-})
-module.exports = mongoose.model("bid", bidController);
+    },
+    // highestbid: {
+    //     type: Number,
+    //     required: true
+    // }
+});
+const Bid = mongoose.model('Bid', bidController);
+
+module.exports = Bid;
