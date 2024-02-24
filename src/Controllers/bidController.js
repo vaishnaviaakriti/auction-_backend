@@ -1,15 +1,16 @@
 const express = require('express');
 const app = express();
 const Bid = require('../Models/Bid');
+const Item = require('../Models/Item'); // Import the Item model
 
 app.use(express.json()); // Middleware to parse JSON request bodies
 
 const bidController = {
     submitBid: async(req, res) => {
-        const { bidAmount, bidDescription } = req.body;
+        const { bidAmount, bidDescription, userId } = req.body;
 
         // Basic validation
-        if (!bidAmount || isNaN(bidAmount) || !bidDescription) {
+        if (!bidAmount || isNaN(bidAmount) || !bidDescription || !userId) {
             return res.status(400).json({ error: 'Invalid bid data' });
         }
 
@@ -18,6 +19,7 @@ const bidController = {
             const newBid = await Bid.create({
                 bidAmount: Number(bidAmount),
                 bidDescription,
+                userId // Assuming userId is a reference to the user who placed the bid
             });
 
             // Send a success response
@@ -28,64 +30,24 @@ const bidController = {
         }
     },
 
-    updateBid: async(req, res) => {
-        const { id } = req.params;
-        const { bidAmount, bidDescription } = req.body;
-
-        // Basic validation
-        if (!bidAmount || isNaN(bidAmount) || !bidDescription) {
-            return res.status(400).json({ error: 'Invalid bid data' });
-        }
-
+    getHighestBidAndWinner: async(req, res) => {
         try {
-            // Update the bid in the database
-            const updatedBid = await Bid.findByIdAndUpdate(id, {
-                bidAmount: Number(bidAmount),
-                bidDescription,
-            }, { new: true });
+            // Find the highest bid in the database and populate the userId field
+            const highestBid = await Bid.findOne().sort({ bidAmount: -1 }).populate('userId');
 
-            if (!updatedBid) {
-                return res.status(404).json({ error: 'Bid not found' });
+            if (!highestBid || !highestBid.userId) {
+                return res.status(404).json({ error: 'No user found for the highest bid' });
             }
 
-            // Send a success response
-            res.json({ message: 'Bid updated successfully', bid: updatedBid });
-        } catch (error) {
-            console.error('Error updating bid:', error);
-            res.status(500).json({ error: 'Internal server error' });
-        }
-    },
+            // Extract the winner's details
+            const winner = {
+                name: highestBid.userId.name,
+                email: highestBid.userId.email
+                    // Add other user details as needed
+            };
 
-    deleteBid: async(req, res) => {
-        const { id } = req.params;
-
-        try {
-            // Delete the bid from the database
-            const deletedBid = await Bid.findByIdAndDelete(id);
-
-            if (!deletedBid) {
-                return res.status(404).json({ error: 'Bid not found' });
-            }
-
-            // Send a success response
-            res.json({ message: 'Bid deleted successfully', bid: deletedBid });
-        } catch (error) {
-            console.error('Error deleting bid:', error);
-            res.status(500).json({ error: 'Internal server error' });
-        }
-    },
-
-    getHighestBid: async(req, res) => {
-        try {
-            // Find the highest bid in the database
-            const highestBid = await Bid.findOne().sort({ bidAmount: -1 });
-
-            if (!highestBid) {
-                return res.status(404).json({ error: 'No bids found' });
-            }
-
-            // Send the highest bid
-            res.json({ highestBid });
+            // Send the highest bid and winner's details
+            res.json({ highestBid, winner });
         } catch (error) {
             console.error('Error fetching highest bid:', error);
             res.status(500).json({ error: 'Internal server error' });
