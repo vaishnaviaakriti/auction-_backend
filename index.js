@@ -14,6 +14,7 @@ const { Server } = require('socket.io');
 const { sendEmail } = require("./src/Helper/Email");
 const bidController = require('./src/Controllers/bidController');
 const { additem, getItem } = require("./src/Controllers/Item")
+const { getHighestBidAndWinner } = require("./src/Controllers/bidController")
 const app = http.createServer(server)
 const io = new Server(app)
 

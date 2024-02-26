@@ -1,6 +1,6 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
-const bidController = new mongoose.Schema({
+const bidSchema = new mongoose.Schema({
     bidAmount: {
         type: Number,
         required: true
@@ -9,15 +9,12 @@ const bidController = new mongoose.Schema({
         type: String,
         required: true
     },
-    // highestbid: {
-    //     type: Number,
-    //     required: true
-    // }
-    userId: {
+    item: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Item' // Reference to the User model
+        ref: 'Item' // Reference to the Item model
     }
 });
-const Bid = mongoose.model('Bid', bidController);
+
+const Bid = mongoose.model('Bid', bidSchema);
 
 module.exports = Bid;

@@ -7,10 +7,10 @@ app.use(express.json()); // Middleware to parse JSON request bodies
 
 const bidController = {
     submitBid: async(req, res) => {
-        const { bidAmount, bidDescription, userId } = req.body;
+        const { bidAmount, bidDescription } = req.body; // Change itemId to Item
 
         // Basic validation
-        if (!bidAmount || isNaN(bidAmount) || !bidDescription || !userId) {
+        if (!bidAmount || isNaN(bidAmount) || !bidDescription) { // Change itemId to Item
             return res.status(400).json({ error: 'Invalid bid data' });
         }
 
@@ -19,7 +19,7 @@ const bidController = {
             const newBid = await Bid.create({
                 bidAmount: Number(bidAmount),
                 bidDescription,
-                userId // Assuming userId is a reference to the user who placed the bid
+                // item: Item // Change itemId to Item
             });
 
             // Send a success response
@@ -32,18 +32,17 @@ const bidController = {
 
     getHighestBidAndWinner: async(req, res) => {
         try {
-            // Find the highest bid in the database and populate the userId field
-            const highestBid = await Bid.findOne().sort({ bidAmount: -1 }).populate('userId');
+            // Find the highest bid in the database and populate the item field
+            const highestBid = await Bid.findOne().sort({ bidAmount: -1 }).populate('bidAmount'); // Change itemId to item
 
-            if (!highestBid || !highestBid.userId) {
-                return res.status(404).json({ error: 'No user found for the highest bid' });
+            if (!highestBid || !highestBid.bidAmount) { // Change itemId to item
+                return res.status(404).json({ error: 'No item found for the highest bid' }); // Change itemId to item
             }
 
             // Extract the winner's details
             const winner = {
-                name: highestBid.userId.name,
-                email: highestBid.userId.email
-                    // Add other user details as needed
+                name: highestBid.bidAmount, // Change itemId to item
+                // You may need to adjust this depending on the structure of the Item model
             };
 
             // Send the highest bid and winner's details
