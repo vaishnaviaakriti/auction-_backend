@@ -1,15 +1,4 @@
-const mongoose = require("mongoose");
-
-const imageSchema = new mongoose.Schema({
-    data: {
-        type: String, // Changed to String type
-        required: true
-    },
-    contentType: {
-        type: String,
-        required: true
-    }
-});
+const mongoose = require("mongoose")
 
 const item = new mongoose.Schema({
     productid: {
@@ -44,11 +33,10 @@ const item = new mongoose.Schema({
         type: String,
         required: true
     },
-    images: [imageSchema],
+
     bid: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Bid",
+        ref: "bid",
     }]
-});
-
+})
 module.exports = mongoose.model("Item", item);

@@ -27,3 +27,14 @@ exports.addForm = async(req, res, next) => {
         res.status(400).json({ message: "Error Occurred" });
     }
 };
+
+exports.getForms = async(req, res) => {
+    try {
+        // Fetch all form submissions from the database
+        const forms = await Form.find();
+        res.status(200).json(forms);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
