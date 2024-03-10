@@ -1,6 +1,6 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
-const info = new mongoose.Schema({
+const infoSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -18,9 +18,11 @@ const info = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
-
+    },
+    active: {
+        type: Boolean,
+        default: true // Set default value to true for active users
     }
+});
 
-
-})
-module.exports = mongoose.model("Info", info);
+module.exports = mongoose.model("Info", infoSchema);

@@ -30,7 +30,7 @@ server.get("/", (req, res) => {
 server.get("/users", users);
 server.post("/register", register, sendEmail);
 server.post("/login", login);
-server.put("/updateUser/:id", updateUser);
+server.put("/updateUser/:id", updateUser); // Update user details including activation/deactivation
 
 // Form routes
 server.post("/addForm", validateForm, isValidated, addForm, sendEmail);

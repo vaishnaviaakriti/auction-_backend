@@ -10,6 +10,7 @@ exports.register = async(req, res, next) => {
         email,
         phone,
         password,
+        active: true, // Set the default value of 'active' field to true
     });
 
     try {
@@ -65,11 +66,15 @@ exports.login = async(req, res) => {
     }
 };
 
-// Function to update user details
+// Function to update user details including activation/deactivation
 exports.updateUser = async(req, res) => {
     try {
-        const newData = req.body;
-        const updateUser = await info.findByIdAndUpdate(req.id, newData);
+        const { id } = req.params; // Assuming the user id is passed as a parameter
+        const { active } = req.body; // Get the 'active' field from the request body
+
+        // Update only the 'active' field
+        const updateUser = await info.findByIdAndUpdate(id, { active });
+
         res.status(200).json({ message: "User updated successfully", updateUser });
     } catch (error) {
         res.status(500).json({ message: "Error updating user", error });
