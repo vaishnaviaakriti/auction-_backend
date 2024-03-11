@@ -3,10 +3,11 @@ const mongoose = require("mongoose");
 const bidController = require('./src/Controllers/bidController');
 const adminLoginController = require('./src/Controllers/adminLogin');
 const { register, login, users, updateUser } = require("./src/Controllers/info");
-const { addForm, getForms } = require("./src/Controllers/Form"); // Import getForms controller function
+const { addForm, getForms } = require("./src/Controllers/Form");
 const { validateForm, isValidated } = require("./src/Middlewares");
 const { additem, getItem } = require("./src/Controllers/Item");
 const { sendEmail } = require("./src/Helper/Email");
+const { createCustomer, getAllCustomers, updateCustomerStatus } = require('./src/Controllers/customer'); // Importing Customer controllers
 const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
@@ -30,11 +31,11 @@ server.get("/", (req, res) => {
 server.get("/users", users);
 server.post("/register", register, sendEmail);
 server.post("/login", login);
-server.put("/updateUser/:id", updateUser); // Update user details including activation/deactivation
+server.put("/updateUser/:id", updateUser);
 
 // Form routes
 server.post("/addForm", validateForm, isValidated, addForm, sendEmail);
-server.get("/getForms", getForms); // Define GET route to fetch form submissions
+server.get("/getForms", getForms);
 
 // Bid routes
 server.post('/submitBid', bidController.submitBid);
@@ -44,6 +45,12 @@ server.get('/bids', bidController.getBidInfo);
 // Item routes
 server.post('/addItem', additem);
 server.get('/getItem', getItem);
+
+// Customer routes
+server.post('/addCustomer', createCustomer);
+server.get('/getCustomers', getAllCustomers);
+server.put('/updateCustomer/:id', updateCustomerStatus);
+// PUT route for updating customer status
 
 // Admin login route
 server.post('/admin/login', adminLoginController.login);
